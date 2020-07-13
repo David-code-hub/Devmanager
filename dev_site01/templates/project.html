@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+ {%block body%}
+{% load bootstrap4 %}
+<style type="text/css">
+  .card{
+    display: flex;
+  }
+  .card{
+    box-shadow: 2px 3px 7px;
+    transition: 0.3s;
+  }
+
+   section{
+    background-image: url('/static/images/team01.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  
+</style>
+
+<section>
+<div class="overlay" style="height: 100vh;background: rgba(29, 30, 32, 0.7);margin-top: -1em;padding: 2em;">
+  {%for message in messages%}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
+  <strong>{{message.tags}}</strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{%endfor%}
+</br>
+<br>
+  <h1 class="text-center" style="margin-top: 3em;color: white;font-size: 58px;text-shadow: 0px 7px 12px #000;"> Developer Site Manager
+<i class="fa fa-code" aria-hidden="true"></i> </h1>
+  <h5 class="text-white text-center">Simple, organised and efficient. </h5>
+  <br>
+
+
+
+</div>
+</section>
+
+<div class="row container" style="margin: 2em auto;">
+
+<div class="col-md-5" style="margin: 4em auto;">
+<div class="card" style="padding: 1em;">
+
+<!--inner-->
+  <h6 class="text-center text-muted text-capitalize">Websites in build... </h6>
+<ol>
+  {% for p in projects %}
+  <li title="view all activities in project" ><p><a href="{% url 'activity' id=p.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{p.title}}</a></p></li>
+  {% empty %}
+   <p class="text-muted"> No projects pending.</p>
+  {%endfor%}
+</ol>
+<form action="" method="post" class="form">
+  
+  <h3 class="text-center">Start new project</h3>
+
+    {% csrf_token %}
+    {% bootstrap_form form%}
+    <button type="submit" class="btn btn-info">Submit</button>
+</form>
+
+</div>
+</div>
+
+<div class="col-md-5" style="margin: 4em auto;">
+<h3>Personal projects:</h3>
+<p class="text-muted">Start and manage your own personal projects. Create short project goals and tick them off as you complete your website. Once the website is complete it will be added to your profile along with the url. Fill in the form on the left and off you go!</p>
+</div>
+
+</div>
+
+
+
+<div class="row container" style="margin: 2em auto;">
+
+<div class="col-md-5" style="margin: 4em auto;">
+<h3>Group projects:</h3>
+<p class="text-muted">Group projects are to help manage your team when working on a large or important project. Once you create a group project you can add your team members as collaborators and assign each team memeber to a specific task. Also once the task is complete it will be visible on the group project. Start by filling in the form on the right.</p>
+</div>
+<div class="col-md-5" style="margin: 4em auto;">
+<div class="card" style="padding: 1em;">
+
+<!--inner-->
+  <h6 class="text-center text-muted text-capitalize">Current Group Project </h6>
+<ol>
+  {% for pro in project %}
+  <li title="view all activities in project" ><p><a href="{% url 'group-project' id=pro.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{pro.project_title}}</a></p></li>
+  {% empty %}
+   <p class="text-muted"> No group projects.</p>
+  {%endfor%}
+</ol>
+<form action="" method="post" class="form">
+  
+  <h3 class="text-center">Start new group project</h3>
+
+    {% csrf_token %}
+    {% bootstrap_form forms%}
+    <button type="submit" class="btn btn-warning">Submit</button>
+</form>
+
+</div>
+</div>
+
+
+
+</div>
+    {%endblock%}

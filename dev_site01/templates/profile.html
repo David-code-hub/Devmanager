@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+ {%block body%}
+{% load bootstrap4 %}
+
+{%for message in messages%}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
+  <strong>{{message.tags}}</strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{%endfor%}
+
+</br>
+
+<div class="col-md-6" style="margin: 1em auto;">
+<div class="card" style="padding: 1em;">
+  {% if p.update == False %}
+<div class="row">
+  <div class="col-md-3">
+<img src="/media/{{p.image}}" style="height: 100px;width: 100px;border-radius: 0.3em;">
+</div>
+<div class="col-md-9">
+<h3 class="text-secondary text-capitalize text-monospace"> {{p.user}}</h3>
+<p>Email : {{p.email}}</p>
+<p>Bio : {{p.bio}}</p>
+
+<a href="{%url 'update' %}" class="btn btn-success btn-sm m-1"><i class="fa fa-edit" aria-hidden="true"></i></a>
+<button type="button" class="btn btn-outline-dark btn-sm m-1">
+  Websites <span class="badge badge-light">{{count}}</span>
+</button>
+<button class="btn btn-outline-dark btn-sm m-1" onclick="groupFunction()">Group Projects <span class="badge badge-light">{{group_project}}</span></button>
+</div>
+</div>
+<hr>
+<div class="card-body" style="height: 350px;overflow: auto;padding: 0px;">
+
+<div id="web">
+  <h5 class="text-success text-monospace text-center">Completed websites:</h5>
+<ol>
+{% for p in project%}
+{% if p.project_url%}
+<li><a href="{% url 'activity' id=p.id %}"><h6 class="text-capitalize text-monospace" style="font-weight: 600;">{{p.title}}</h6></a>
+<p class="text-muted">Website url : <a href="{{p.project_url}}" target="_blank">{{p.project_url|slice:":40" }}... </a>
+<a href="{% url 'delete_single_project' id=p.id %}" class="btn btn-light btn-sm">Remove</a></p></li>
+{%endif%}
+{% empty %}
+<p class="text-muted text-center">You have not completed any websites/projects</p>
+{%endfor%}
+</ol>
+</div>
+
+<div id="group">
+  <h3 class="text-center">Group projects</h3>
+<ol>
+{% for p in profile_group_project %}
+
+<li>{{p.project_title}} <p style="font-weight: 600;">Project Lead : {{p.lead}} <a href="{% url 'group-project' id=p.id%}" class="btn btn-success btn-sm" title="join"><i class="fa fa-link" aria-hidden="true"></i>
+</a></p></li>
+
+
+{% endfor %}
+</ol>
+</div>
+
+
+
+</div>
+
+{%else%}
+<form action="" method="post" class="form" enctype="multipart/form-data">
+  <h3 class="text-center">Update Profile</h3>
+
+    {% csrf_token %}
+
+
+<div class="form-group is-valid">
+  <label for="id_image">Image</label>
+  <br>
+  {% if p.image%}
+  Currently: <a href="{{p.image.url}}">{{p.image.url}}</a>
+  {% else %}
+  Currently:
+  {% endif %}
+<input type="checkbox" name="image-clear" id="image-clear_id">
+<label for="image-clear_id">Clear</label><br>
+Change:
+<input type="file" name="image" accept="image/*" class="form-control-file is-valid" title="" id="id_image">
+
+</div>
+
+
+<div class="form-group is-valid">
+  <label for="id_email">Email</label>
+  <input type="email" name="email" maxlength="254" class="form-control is-valid" placeholder="Email" title="" id="id_email" value="{{p.email}}">
+</div>
+
+<div class="form-group is-invalid">
+  <label for="id_bio">Bio</label>
+  <textarea name="bio" cols="40" rows="10" maxlength="300" class="form-control is-valid" placeholder="Bio" title="" required="" id="id_bio" value="" >{{p.bio}}</textarea>
+
+</div>
+
+
+
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    {% endbuttons %}
+</form>
+{%endif%}
+</div>
+</div>
+
+
+<script type="text/javascript">
+var a = document.getElementById('group');
+var b = document.getElementById('web');
+
+function groupFunction() {
+  if(a.style.display === 'block'){
+    a.style.display = 'none';
+    b.style.display ='block';
+  }else{
+    a.style.display = 'block';
+    b.style.display = 'none';
+  }
+}
+</script>
+
+{%endblock%}

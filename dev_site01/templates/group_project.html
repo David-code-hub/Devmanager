@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+ {%block body%}
+{% load bootstrap4 %}
+<style type="text/css">
+	
+	#task_filter{
+		display: none;
+	}
+</style>
+{%for message in messages%}
+
+<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
+  <strong>{{message.tags}} </strong>  {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{%endfor%}
+</br>
+
+<!--status -->
+{% if project.status == False%}
+
+
+
+
+<div class="row container" style="margin: 2em auto;">
+
+
+<div class="col-md-7">
+<div class="card" style="padding: 1em;margin-bottom: 1em;">
+<h3 class="text-muted">Tasks to complete for project</h3>
+
+<h5>
+{% if project.lead == request.user%}
+<a href="{% url 'add_collab' id=project.id%}" class="btn btn-primary btn-sm m-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Collaborators</a> 
+
+<a href="{% url 'close_project' id=project.id%}"  class="btn btn-danger btn-sm">Close Project</a>
+{%endif%}
+</h5>
+
+<hr>
+
+<h5>
+<button onclick="taskFunction()" class="btn btn-light btn-sm" id="text">View your tasks</button> 
+</h5>
+
+<ol id="demo">
+{% for t in task %}
+
+{% if t.done == True%}
+
+
+
+
+<li><del>{{t.task}}</del>
+<a href="#" title="{{t.assign_collaborator_to_task}}" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" >
+{{t.assign_collaborator_to_task|make_list|first}}
+</a>
+</li><br>
+
+
+
+{% else %}
+
+
+<li>{{t.task}}
+<a href="#" title="{{t.assign_collaborator_to_task}}" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" ><i class="fa fa-user " aria-hidden="true"></i> 
+{{t.assign_collaborator_to_task|make_list|first}}
+</a>
+{% if project.lead == request.user%}
+<a href="{% url 'update_task' id=t.id %}" class="btn btn-info btn-sm"><i class="fa fa-edit" aria-hidden="true"></i></a>
+{%endif%}
+</li><br>
+
+
+{% endif %}
+
+
+{%endfor%}
+</ol>
+
+
+
+
+<ol  id="task_filter">
+{% for t in user_task%}
+
+{% if t.done == True%}
+
+
+<li ><del>{{t.task}}</del>
+<a href="#" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" >
+{{t.assign_collaborator_to_task|make_list|first}}
+</a>
+</li><br>
+
+{% else %}
+
+<li >{{t.task}}
+<a href="#" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" >
+{{t.assign_collaborator_to_task|make_list|first}}
+</a>
+<a href="{% url 'complete' id=t.id%}"  class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i></a>
+
+</p>
+</li>
+
+
+
+
+{% endif %}
+
+
+{% empty %}
+
+<p class="text-muted text-center">It seems no tasks were assigned to you.</p>
+
+{% endfor%}
+</ol>
+
+
+
+</div>
+</div>
+
+
+
+
+
+
+<!--collaborators and form for activity-->
+
+<div class="col-md-5">
+<div class="card" style="padding: 1em;">
+{% if project.lead == request.user%}
+
+<form action="" method="post">
+	    {% csrf_token %}
+{% bootstrap_form form%}
+ {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    {% endbuttons %}
+</form>
+{%else%}
+
+
+<h3 class="text-success text-center" style="font-weight: 800;"><i class="fa fa-check" aria-hidden="true"></i> Completed tasks:</h3>
+<ol>
+{% for t in new%}
+
+{% if t.done == True%}
+
+
+<li ><del>{{t.task}}</del>
+<a href="#" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" >
+{{t.assign_collaborator_to_task|make_list|first}}
+</a>
+<small><b>{{t.completed_at|date}}</b></small>
+</li><br>
+
+{% endif %}
+
+{% empty %}
+<p class="text-muted text-center">No tasks have been completed.</p>
+
+{% endfor %}
+</ol>
+
+
+{% endif %}
+
+
+</div>
+</div>
+
+
+</div>
+
+<script type="text/javascript">
+
+var all = document.getElementById('demo');
+var filter = document.getElementById('task_filter');
+var text = document.getElementById('text')
+
+function taskFunction(){
+	if (all.style.display === 'none') {
+	all.style.display ='block';
+	filter.style.display = 'none';
+	text.innerHTML = 'View your tasks';
+	} else{
+    all.style.display = "none";
+    filter.style.display = "block";
+    text.innerHTML = 'View all tasks';
+  } 
+}
+
+</script>
+
+{% else %}
+
+<div class="container row" style="margin: 2em auto;">
+<div class="col-md-5" style="margin: 0 auto;">
+<div class="card" style="padding: 1em;">
+
+<h2 class="text-muted text-center"> This project has been closed and is not active.</h2>
+
+{% if project.lead == request.user%}
+<hr>
+<h5>
+<a href="{% url 'open_project' id=project.id%}"  class="btn btn-success btn-sm">Open project</a>
+</h5>
+{%endif%}
+
+</div>
+</div>
+</div>
+
+{% endif%}
+<!--endstatus -->
+
+
+{%endblock%}

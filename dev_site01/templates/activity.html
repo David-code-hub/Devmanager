@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+ {%block body%}
+{% load bootstrap4 %}
+{%for message in messages%}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
+  <strong>{{message.tags}} </strong>  {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{%endfor%}
+</br>
+<div class="row container" style="margin:2em auto;">
+{%for p in project %}
+{% if p.project_url%}
+<div class="col-md-7" style="margin-bottom: 1em;margin:0 auto;">
+	<div class="card" style="padding: 1em;">
+
+<h3 class="text-muted text-capitalize">Title : {{p.title}} (Complete)</h3><br>
+
+<p class="text-muted">Sarted at : {{p.start_date}} <br>
+Completed at : {{p.end_date|date}} <br>
+Time to complete website : {{p.duration}}</p>
+<hr>
+
+<p><b>Owner</b>: 	{{p.website_owner}}</p><br>
+
+<p><b>Challenges</b>:	{{p.challenges}} </p><br>
+
+ 
+<p><b>Oustanding requirements</b>:	{{p.outstanding_requirements}}</p>
+
+<br>
+<p>Url Link to website : <a href="{{p.project_url}}" target="_blank">{{p.project_url}}</a></p><br>
+
+<p>Website done by : {{p.user}}</p>
+	
+
+
+
+
+
+
+
+
+	</div>
+</div>
+{%else%}
+<div class="col-md-7" style="margin-bottom: 1em;">
+	<div class="card" style="padding: 1em;">
+
+		{%for p in project %}
+
+		<h3 class="text-center text-capitalize">{{p.title}}</h3>
+		<br>
+
+
+		{% if p.end_date%}
+
+		<p class="text-muted">Please add url.</p>
+
+		{%else%}
+
+		<h5>
+		<a href="{%url 'complete_project' id=p.id%}" class="btn btn-success btn-sm">Project Complete</a>
+		</h5>
+
+
+		{%endif%}
+		{% endfor %}
+		<hr>
+
+		<!--list-->
+		<ol>
+		{%for a in activity %}
+
+			{% if a.done == False%}
+		<li>{{a.activity}} <a href="{% url 'done' id=a.id%}" class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i> </a> <a href="{% url 'delete_list' id=a.id%}" class="btn btn-outline-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a></li> <br>
+
+			{%else%}
+
+		<li><del>{{a.activity}} </del></li><br>
+
+			{%endif%}
+
+		{%empty%}
+		<p class="text-center text-muted">no activities/tasks for this project have been added.</p>
+		{%endfor%}
+		</ol>
+	</div>
+</div>
+</br>
+
+<div class="col-md-5">
+<div class="card" style="padding: 1em;margin-bottom: 1em; ">
+
+{%for p in project %}
+
+{% if  p.complete == True %}
+<form action="" method="post" class="form">
+	<h3 class="text-center">Additional information</h3>
+	<p class="text-muted">Add url for your projects(copy and paste url link from browser).</p>
+
+    {% csrf_token %}
+    {% bootstrap_form formurl%}
+    <button type="submit" class="btn btn-info">Submit</button>
+</form>
+
+{%else%}
+
+<form action="" method="post" class="form" >
+	<h3 class="text-center">Add task</h3>
+
+    {% csrf_token %}
+    {% bootstrap_form form%}
+    <button type="submit" class="btn btn-info">Submit</button>
+</form>
+{%endif%}
+
+{%endfor%}
+
+</div>
+</div>
+{%endif%}
+{%endfor%}
+</div>
+
+{%endblock%}
