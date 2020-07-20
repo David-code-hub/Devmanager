@@ -12,6 +12,9 @@
     margin-top: 0.3em;
 
   }
+  li:hover{
+      background: #ededed;
+  }
 
   .col-md-3{
     border-left: 1px dotted rgba(0,0,0,0.28);
@@ -68,7 +71,7 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 {% for p in project%}
 {% if p.project_url%}
 
-<li>
+<li style="border-bottom: 0px;">
 <div class="row">
   <div class="col-md-9">
 <a href="{% url 'activity' id=p.id %}"><h6 class="text-capitalize text-monospace" style="font-weight: 600;">{{p.title}}</h6></a>

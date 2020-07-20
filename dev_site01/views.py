@@ -25,7 +25,6 @@ def signup(request):
 			if User.objects.filter(username=username).exists():
 				messages.warning(request, 'Sorry that username is already taken.')
 				return redirect('signup')
-
 			else:
 				#if doesnt exist create user and profile
 				user = User.objects.create(username=username)

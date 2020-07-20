@@ -15,71 +15,16 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    width: 80%;
+    border-bottom-right-radius: 25em;
   }
   
-  .portfolio-item {
-  display: block;
-  position: relative;
-  overflow: hidden;
-  max-width: 530px;
-  margin: auto auto 1rem;
-}
-
-.portfolio-item .caption {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(33, 37, 41, 0.2);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 1;
-}
-
-.portfolio-item .caption .caption-content {
-  color: #fff;
-  margin: auto 2rem 2rem;
-}
-
-.portfolio-item .caption .caption-content h2 {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-}
-
-.portfolio-item .caption .caption-content p {
-  font-weight: 300;
-  font-size: 1.2rem;
-}
-
-@media (min-width: 992px) {
-  .portfolio-item {
-    max-width: none;
-    margin: 0;
+  .overlay{
+    border-bottom-right-radius: 25em;
   }
-  .portfolio-item .caption {
-    -webkit-transition: -webkit-clip-path 0.25s ease-out, background-color 0.7s;
-    -webkit-clip-path: inset(0px);
-    clip-path: inset(0px);
-  }
-  .portfolio-item .caption .caption-content {
-    transition: opacity 0.25s;
-    margin-left: 5rem;
-    margin-right: 5rem;
-    margin-bottom: 5rem;
-  }
-  .portfolio-item img {
-    -webkit-transition: -webkit-clip-path 0.25s ease-out;
-    -webkit-clip-path: inset(-1px);
-    clip-path: inset(-1px);
-  }
-  .portfolio-item:hover img {
-    -webkit-clip-path: inset(2rem);
-    clip-path: inset(2rem);
-  }
-  .portfolio-item:hover .caption {
-    background-color: rgba(29, 128, 159, 0.9);
-    -webkit-clip-path: inset(2rem);
-    clip-path: inset(2rem);
+ @media(max-width: 400px){
+  .text-white{
+    color:#545b62!important
   }
 }
 </style>
@@ -115,7 +60,7 @@
   <h6 class="text-center text-muted text-capitalize">Websites in build... </h6>
 <ol>
   {% for p in projects %}
-  <li title="view all activities in project" ><p><a href="{% url 'activity' id=p.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{p.title}}</a></p></li>
+  <li title="view all activities in project" ><p><a href="{% url 'activity' id=p.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{p.title}} <span class="badge badge-primary">pending</span></a></p></li>
   {% empty %}
    <p class="text-muted"> No projects pending.</p>
   {%endfor%}
@@ -140,7 +85,7 @@
 </div>
 
 
-
+<div style="background-image: url('/static/images/dev.jpg');background-attachment: fixed;">
 <div class="row container" style="margin: 2em auto;">
 
 <div class="col-md-5" style="margin: 4em auto;">
@@ -154,7 +99,7 @@
   <h6 class="text-center text-muted text-capitalize">Current Group Project </h6>
 <ol>
   {% for pro in project %}
-  <li title="view all activities in project" ><p><a href="{% url 'group-project' id=pro.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{pro.project_title}}</a></p></li>
+  <li title="view all activities in project" ><p><a href="{% url 'group-project' id=pro.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{pro.project_title}}<span class="badge badge-success">Open project</span></a></p></li>
   {% empty %}
    <p class="text-muted"> No group projects.</p>
   {%endfor%}
@@ -171,6 +116,29 @@
 </div>
 </div>
 
+
+
+</div>
+</div>
+<div class="row container" style="margin: 2em auto;">
+
+
+<div class="col-md-5" style="margin: 4em auto;">
+<div class="card" style="padding: 1em;">
+<img src="/static/images/profile_image.png" style="width: 100%;">
+<p>
+<a href="{% url 'profile' %}" class="btn btn-primary">Profile</a>
+</p>
+</div>
+
+
+
+</div>
+
+<div class="col-md-5" style="margin: 4em auto;">
+<h3>Your Profile:</h3>
+<p class="text-muted">Once signed up, a user profile will be created automatically. Your email, bio and profile image is required to complete your profile. Click on the 'Profile' button to view/update your details. </p>
+</div>
 
 
 </div>
