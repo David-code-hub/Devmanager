@@ -32,7 +32,7 @@ class Projects(models.Model):
 
 
 	def __str__(self):
-		return str(self.user) + ' : ' +  self.title + ' (' + ' Project ' + ')'
+		return str(self.user) + ' : ' +  self.title + ' (' + ' Website ' + ')'
 
 
 class List(models.Model):

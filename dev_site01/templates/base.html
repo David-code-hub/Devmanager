@@ -11,6 +11,9 @@
       .btn{
         font-weight: 600!important;
       }
+      footer{
+        margin-top: 9em;
+      }
       /*footer {
        position: fixed;
        left: 0;
@@ -38,7 +41,7 @@
 
     <title>Dev-site</title>
   </head>
-<nav class="navbar navbar-expand-lg navbar-light" style="background:lightblue;position: fixed;width: -webkit-fill-available;z-index: 200;box-shadow: 0px 2px 7px;" >
+<nav class="navbar navbar-expand-lg navbar-light" style="background:lightblue;position: fixed;width: -webkit-fill-available;z-index: 200;box-shadow: 0px 2px 7px; margin-bottom: 3em;" >
   <a class="navbar-brand" href="#" style="font-weight: 900;color: white;">D<span style="color: white;">.</span>S<span style="color: white;">.</span>M <i class="fa fa-code" aria-hidden="true"></i></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -73,21 +76,19 @@
 </nav>
 <br>
   <body>
-    <div >
+    <div class="overlay">
     {%block body%}
-    
 
    
     {%endblock%}
-   </div>
-
+    </div>
 <footer class="page-footer font-small blue" style="background:lightblue;">
 
-  <!-- Copyright -->
-  <div class="footer-copyright text-center py-3">© 2020 Copyright:
-    <a href="#"> D.S.M</a>
+  <!-- Copyright
+  <div class="footer-copyright text-center py-3">
+    <p style="font-weight: 700;">© 2020 Copyright :Simple django app to manage your projects. </p>
   </div>
-  <!-- Copyright -->
+  Copyright -->
 
 </footer>
 

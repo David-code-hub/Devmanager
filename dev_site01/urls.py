@@ -21,6 +21,9 @@ urlpatterns = [
 	#profile
 	path('profile/', views.profile,name="profile"),
 	path('update/', views.update,name="update"),
+	path('leave_project/<int:id>/', views.leave_project,name="leave_project"),
+	path('close_project_owner/<int:id>/', views.close_project_owner,name="close_project_owner"),
+
 
 
 	#group project 

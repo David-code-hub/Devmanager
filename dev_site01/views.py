@@ -14,24 +14,32 @@ from .models import Projects,List,UserProfile,Group_project,Collaborators,Task
 
 
 def signup(request):
-	context={
-	
-			"form":UserCreationForm(),
-		}
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		password2 = request.POST['password2']
 
-	form = UserCreationForm(request.POST or None)
-	if form.is_valid():
-		form.save()
-		username = form.cleaned_data.get('username')
-		password = form.cleaned_data.get('password1')
-		password = form.cleaned_data.get('password2')
-		user = authenticate(username=username,password=password)
-		UserProfile.objects.create(user=user)
-		login(request, user)
-		messages.success(request,'Successfully created account.')
-		return redirect('project_home')
+		#check if passwords match
+		if password == password2:
+			#if user exists in database
+			if User.objects.filter(username=username).exists():
+				messages.warning(request, 'Sorry that username is already taken.')
+				return redirect('signup')
+
+			else:
+				#if doesnt exist create user and profile
+				user = User.objects.create(username=username)
+				UserProfile.objects.create(user=user)
+				login(request, user)
+				messages.success(request,'Successfully created account.')
+				return redirect('project_home')
+		else:
+			messages.warning(request,'Passwords do not match.')
+			return redirect('signup')
 	else:
-		return render(request,'signup.html',context)
+		return render(request,'signup.html')
+
+
 
 
 
@@ -40,13 +48,24 @@ def login_index(request):
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 		user = authenticate(username=username, password=password)
-		if user:
-			if user.is_active:
-				login(request,user)
-				messages.success(request, 'User logged in.')
-		return redirect('project_home')
+
+		if user is not None:
+			login(request, user)
+			username = User.objects.get(username=username)
+			messages.success(request, 'Welcome ' + str(username))
+			return redirect('project_home')
+		else:
+			if User.objects.filter(username=username):
+				messages.warning(request,'Invalid password')
+				return redirect('home')
+			else:
+				messages.warning(request, 'Invalid username')
+				return redirect('home')
 	else:
 		return render(request, 'index.html')
+
+
+
 
 
 def signout(request):
@@ -374,7 +393,7 @@ def profile(request):
 	project = Projects.objects.filter(user=request.user).order_by('-id')
 	count = Projects.objects.filter(user=request.user).count()
 	p = UserProfile.objects.get(user=request.user)
-	profile_group_project = p.group_project.all()
+	profile_group_project = p.group_project.all().order_by('-id')
 	group_project = p.group_project.all().count()
 
 	form = UserProfileForm(request.POST,instance=p)
@@ -399,6 +418,21 @@ def profile(request):
 	}
 
 	return render(request,'profile.html',context)
+
+
+def leave_project(request,id):
+	p = UserProfile.objects.get(user=request.user)
+	profile_group_project = p.group_project.get(id=id)
+	profile_group_project.delete()
+	p.save()
+	return redirect('profile')
+
+def close_project_owner(request,id):
+	project = Group_project.objects.get(id=id)
+	project.delete()
+	return redirect('profile')
+
+
 
 
 

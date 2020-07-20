@@ -1,7 +1,25 @@
 {% extends 'base.html' %}
  {%block body%}
 {% load bootstrap4 %}
+<style type="text/css">
+  .card{
+    box-shadow: inset 1px 2px 8px black;
+    border:5px solid rgba(0,0,0,0.28);
+  }
+  li{
+    border-bottom: 1px solid rgba(0,0,0,0.28);
+    margin-bottom: 0.3em;
+    margin-top: 0.3em;
 
+  }
+
+  .col-md-3{
+    border-left: 1px dotted rgba(0,0,0,0.28);
+  }
+  #group{
+    display: none;
+  }
+</style>
 {%for message in messages%}
 <div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
   <strong>{{message.tags}}</strong> {{message}}
@@ -12,10 +30,11 @@
 {%endfor%}
 
 </br>
-
+ {% if p.update == False %}
+<div class="row container" style="margin:0 auto;margin-top: 3em;">
 <div class="col-md-6" style="margin: 1em auto;">
 <div class="card" style="padding: 1em;">
-  {% if p.update == False %}
+ 
 <div class="row">
   <div class="col-md-3">
 <img src="/media/{{p.image}}" style="height: 100px;width: 100px;border-radius: 0.3em;">
@@ -24,26 +43,48 @@
 <h3 class="text-secondary text-capitalize text-monospace"> {{p.user}}</h3>
 <p>Email : {{p.email}}</p>
 <p>Bio : {{p.bio}}</p>
+<p>Websites : <span class="badge badge-info">{{count}}</span> |
+Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 
-<a href="{%url 'update' %}" class="btn btn-success btn-sm m-1"><i class="fa fa-edit" aria-hidden="true"></i></a>
-<button type="button" class="btn btn-outline-dark btn-sm m-1">
-  Websites <span class="badge badge-light">{{count}}</span>
-</button>
-<button class="btn btn-outline-dark btn-sm m-1" onclick="groupFunction()">Group Projects <span class="badge badge-light">{{group_project}}</span></button>
+<a href="{%url 'update' %}" class="btn btn-success btn-sm m-1"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
+
+<button class="btn btn-outline-dark btn-sm m-1" onclick="groupFunction()"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
 </div>
 </div>
 <hr>
-<div class="card-body" style="height: 350px;overflow: auto;padding: 0px;">
+
+</div>
+</div>
+
+
+
+
+<div class="col-md-6">
+<div class="card" style="height: 450px;overflow: auto;padding: 1em;">
 
 <div id="web">
-  <h5 class="text-success text-monospace text-center">Completed websites:</h5>
+  <h3  class="text-center text-success" style="font-weight:800;"><i class="fa fa-code"></i> Completed websites:</h3>
 <ol>
 {% for p in project%}
 {% if p.project_url%}
-<li><a href="{% url 'activity' id=p.id %}"><h6 class="text-capitalize text-monospace" style="font-weight: 600;">{{p.title}}</h6></a>
-<p class="text-muted">Website url : <a href="{{p.project_url}}" target="_blank">{{p.project_url|slice:":40" }}... </a>
-<a href="{% url 'delete_single_project' id=p.id %}" class="btn btn-light btn-sm">Remove</a></p></li>
+
+<li>
+<div class="row">
+  <div class="col-md-9">
+<a href="{% url 'activity' id=p.id %}"><h6 class="text-capitalize text-monospace" style="font-weight: 600;">{{p.title}}</h6></a>
+</div>
+
+<div class="col-md-3">
+<p class="text-muted">
+<a href="{% url 'delete_single_project' id=p.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt" aria-hidden="true"></i></a></p>
+</div>
+</div>
+</li>
+
+
+<!--Website url : <a href="{{p.project_url}}" target="_blank">{{p.project_url|slice:":20" }}... </a>-->
 {%endif%}
+
 {% empty %}
 <p class="text-muted text-center">You have not completed any websites/projects</p>
 {%endfor%}
@@ -51,13 +92,52 @@
 </div>
 
 <div id="group">
-  <h3 class="text-center">Group projects</h3>
+  <h3 class="text-center text-success" style="font-weight:800;"><i class="fa fa-laptop-code"></i> Group projects</h3>
 <ol>
 {% for p in profile_group_project %}
+<!--startif-->
+{% if p.lead == request.user%}
 
-<li>{{p.project_title}} <p style="font-weight: 600;">Project Lead : {{p.lead}} <a href="{% url 'group-project' id=p.id%}" class="btn btn-success btn-sm" title="join"><i class="fa fa-link" aria-hidden="true"></i>
-</a></p></li>
+<li>
+<div class="row">
+  <div class="col-md-9">
+<a href="{% url 'group-project' id=p.id%}" class="btn btn-info btn-sm" title="view your group project"><i class="fa fa-link" aria-hidden="true"></i>
+{{p.project_title}} </a>
+<a href="{% url 'close_project_owner' id=p.id%}" class="btn btn-primary btn-sm m-1"><i class="fa fa-trash-alt" aria-hidden="true"></i></a>
+</div>
 
+<div class="col-md-3">
+<span class="badge badge-warning">Owner</span>
+</div>
+</div>
+
+<p class="text-muted"> </p>
+</li>
+
+
+{% else %}
+
+<li>
+<div class="row">
+<div class="col-md-9">
+<a href="{% url 'group-project' id=p.id%}" class="btn btn-info btn-sm" title="join"><i class="fa fa-link" aria-hidden="true"></i>{{p.project_title}}</a>
+<a href="{% url 'leave_project' id=p.id%}" class="btn btn-primary btn-sm m-1" title="Leave project"><i class="fa fa-walking" aria-hidden="true"></i></a>
+</div>
+
+<div class="col-md-3">
+ <span class="badge badge-secondary">Collaborator</span>
+</div>
+</div>
+ <p class="text-muted"> </p>
+ </li>
+
+
+{% endif %}
+<!--endif-->
+
+{% empty %}
+
+<p class="text-muted text-center">You have not been added to or created any group projects.</p>
 
 {% endfor %}
 </ol>
@@ -66,8 +146,13 @@
 
 
 </div>
+</div>
+</div>
 
 {%else%}
+
+<div class="col-md-6" style="margin: 0 auto;margin-top: 3em;">
+<div class="card" style="padding: 1em;">
 <form action="" method="post" class="form" enctype="multipart/form-data">
   <h3 class="text-center">Update Profile</h3>
 
@@ -107,9 +192,10 @@ Change:
         <button type="submit" class="btn btn-primary">Submit</button>
     {% endbuttons %}
 </form>
+</div>
+</div>
 {%endif%}
-</div>
-</div>
+
 
 
 <script type="text/javascript">
