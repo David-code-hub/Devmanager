@@ -2,7 +2,7 @@
 {%block body%}
 {% load bootstrap4 %}
 {% load crispy_forms_tags %}
-
+<div class="row ui container ui center aligned" style="margin:0 auto;margin-top: 3em;">
 {%for message in messages%}
 <div class="ui {{message.tags}} message">
   <i class="close icon"></i>
@@ -15,18 +15,13 @@
 
 </br>
  {% if p.update == False %}
-<div class="row ui container" style="margin:0 auto;margin-top: 3em;">
-<div class="col-md-6" style="margin: 1em auto;">
-<div class="ui card" style="padding: 1em;">
- 
-<div class="row">
-  <div class="col-md-3">
-<img src="/media/{{p.image}}" style="height: 100px;width: 100px;border-radius: 0.3em;">
-</div>
-<div class="col-md-9">
-<h3 class="text-secondary text-capitalize text-monospace"> {{p.user}}</h3>
-<p>Email : {{p.email}}</p>
-<p>Bio : {{p.bio}}</p>
+ <h2 class="ui center aligned icon header">
+  <i class="circular user icon"></i>
+  {{p.user}}'s  Profile
+</h2>
+
+<p>{{p.bio}}</p>
+<p> Contact me at {{p.email}}.</p>
 <p>Websites : <span class="badge badge-info">{{count}}</span> |
 Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 
@@ -34,11 +29,10 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 
 <button class="ui teal basic button" onclick="groupFunction()"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
 </div>
-</div>
-<hr>
 
-</div>
-</div>
+
+
+
 
 
 
@@ -119,19 +113,25 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 
 
 {% else %}
-
-<li>
-<div class="row">
-<div class="col-md-9">
-<a href="{% url 'group-project' id=p.id%}" class="ui green basic button" data-content="join"><i class="fa fa-link" aria-hidden="true"></i>{{p.project_title}}</a>
-
-<a href="{% url 'leave_project' id=p.id%}" class="ui red basic button" data-content="Leave project"><i class="fa fa-walking" aria-hidden="true"></i></a>
-</div>
-
-</div>
- <p class="text-muted"> </p>
- </li>
-
+<div class="card">
+    <div class="content">
+      <div class="header">
+        {{p.project_title}}
+      </div>
+      <div class="meta">
+        Lead : {{p.lead}}
+      </div>
+      <div class="description">
+       Status : {{p.status}}
+      </div>
+    </div>
+    <div class="extra content">
+      <div class="ui two buttons">
+        <a href="{% url 'group-project' id=p.id%}" class="ui green basic button" title="view your group project" data-content="join"><i class="fa fa-link" aria-hidden="true"></i></a>
+        <a href="{% url 'leave_project' id=p.id%}" class="ui red basic button" data-content="Leave project"><i class="fa fa-walking" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </div>
 
 {% endif %}
 <!--endif-->
@@ -146,7 +146,7 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 </div>
 
 </div>
-</div>
+
 
 {%else%}
 
