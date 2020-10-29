@@ -14,6 +14,9 @@ from .models import Projects,List,UserProfile,Group_project,Collaborators,Task
 
 
 def signup(request):
+	context={
+	 "form":UserCreationForm(),
+	}
 	if request.method == 'POST':
 		username = request.POST['username']
 		password = request.POST['password']
@@ -27,7 +30,8 @@ def signup(request):
 				return redirect('signup')
 			else:
 				#if doesnt exist create user and profile
-				user = User.objects.create(username=username)
+				user = User.objects.create_user(username=username, password=password)
+				user.save()
 				UserProfile.objects.create(user=user)
 				login(request, user)
 				messages.success(request,'Successfully created account.')
@@ -36,7 +40,7 @@ def signup(request):
 			messages.warning(request,'Passwords do not match.')
 			return redirect('signup')
 	else:
-		return render(request,'signup.html')
+		return render(request,'signup.html',context)
 
 
 
@@ -82,9 +86,15 @@ def signout(request):
 def project_home(request):
 	project = Group_project.objects.filter(lead=request.user)[0:2]
 	projects = Projects.objects.filter(user=request.user,project_url=None).order_by('-id')[0:2]
+	users  = User.objects.all().count()
+	sites	= Projects.objects.all().count()
+	groups = Group_project.objects.all().count()
 	context = {
 		"projects":projects,
 		"project":project,
+		"users":users,
+		"sites":sites,
+		"groups":groups,
 		"form":ProjectForm(),
 		"forms": Group_projectForm(),
 	}
@@ -196,13 +206,15 @@ def update_task(request,id):
 
 	form = TaskForm(request.POST, instance=task)
 	form.fields["assign_collaborator_to_task"] = models.ModelChoiceField(queryset=Collaborators.objects.filter(project=project))
-	if form.is_valid():
-		save = form.save(commit=False)
-		save.group_project = project
-		save.save()
-		project.task.add(save)
-
-		return redirect('group-project' ,id=project.id)
+	if request.method == 'POST':
+		if form.is_valid():
+			save = form.save(commit=False)
+			save.group_project = project
+			save.save()
+			project.task.add(save)
+			return redirect('group-project' ,id=project.id)
+		else:
+			messages.error(request,'Sorry an error occured.')
 
 	context = {
 		"project":project,

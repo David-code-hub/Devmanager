@@ -1,75 +1,53 @@
 {% extends 'base.html' %}
  {%block body%}
 {% load bootstrap4 %}
-<style type="text/css">
-  body{
-    background-image: url('/static/images/codeback01.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-  
-  label{
-    font-weight: 500;
-  }
-
-  @media(max-width:600px ){
-      body{
-        background-size: auto;
-      }
-      .overlay{
-        height: 140vh!important;
-      }
-    }
-    
-    .overlay{
-        height: 100vh;
-        background: rgba(0,0,0,0.7);
-        margin-bottom: -4em;
-      }
-    footer{
-        margin-top: 1em;
-      }
-</style>
-<div>
 
 <br>
 <br>
 {%for message in messages%}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}}</strong> {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
 </br>
 
-<div class="col-md-4" style="margin: 2em auto;">
-<div class="card"  style="padding: 1em;background: transparent;color: white;border: 1px solid white; ">
-<form action="" method="post" class="form">
-	<h3 class="text-center">Signup <i class="fa fa-laptop-code"></i></h3>
+<div class="eight wide column" style="margin: auto;">
+<div class="ui card"  style="padding: 1em;margin:auto; ">
+  <a class="ui green ribbon label"> Fill out form below!</a>
+      <br>
+
+ 
+<form action="" method="post" class="ui form">
 
     {% csrf_token %}
+      <div class="field">
+  <div class="ui left icon input large">
+  <input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" class="form-control" placeholder="Username" title="" required="" id="id_username">
+  <i class="user icon"></i>
+</div>
+</div>
+      
 
-      <div class="form-group"><label for="id_username">Username</label>
-        <input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" class="form-control" placeholder="Username" title="" required="" id="id_username">
-      </div>
-    
-    <div class="form-group">
-      <label for="id_password">Password</label>
-      <input type="password" name="password" autocomplete="new-password" class="form-control" placeholder="Password" required="" id="id_password">
-    </div>
+            <div class="field">
+  <div class="ui left icon input large">
+  <input type="password" name="password" autocomplete="new-password" class="form-control" placeholder="Password" required="" id="id_password">
+  <i class="key icon"></i>
+</div>
+</div>
+      <div class="field">
+  <div class="ui left icon input large">
+  <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="Password confirmation" required="" id="id_password2">
+  <i class="key icon"></i>
+</div>
+</div>
 
 
-    <div class="form-group">
-      <label for="id_password2">Password confirmation</label>
-      <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="Password confirmation" required="" id="id_password2">
-        <small class="form-text text-white">Enter the same password as before, for verification.</small>
-    </div>
+       <button class="ui positive basic button submit large">Submit</button>
 
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    {% endbuttons %}
 </form>
 </div>
 </div>

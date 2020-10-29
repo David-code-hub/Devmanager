@@ -3,144 +3,186 @@
 {% load bootstrap4 %}
 <style type="text/css">
   .card{
-    display: flex;
+    margin:1em!important;
   }
-  .card{
-    box-shadow: 2px 3px 7px;
-    transition: 0.3s;
-  }
-
-   section{
-    background-image: url('/static/images/team01.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    width: 80%;
-    border-bottom-right-radius: 25em;
-  }
-  
-  .overlay{
-    border-bottom-right-radius: 25em;
-  }
- @media(max-width: 400px){
-  .text-white{
-    color:#545b62!important
-  }
-}
 </style>
-
+<div class="ui container">
 <section>
-<div class="overlay" style="height: 100vh;background: rgba(29, 30, 32, 0.7);margin-top: -1em;padding: 2em;">
   {%for message in messages%}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}}</strong> {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
-</br>
-<br>
-  <h1 class="text-center" style="margin-top: 3em;color: white;font-size: 58px;text-shadow: 0px 7px 12px #000;"> Developer Site Manager
-<i class="fa fa-code" aria-hidden="true"></i> </h1>
-  <h5 class="text-white text-center">Simple, organised and efficient. </h5>
-  <br>
 
-
-
-</div>
+  <center><h1 class="text-center" style="margin-top: 1em;color: black;font-size: 58px;" id="title"> </h1></center>
 </section>
 
-<div class="row container" style="margin: 2em auto;">
+<div class="row ui container" style="margin: 2em auto;">
 
 <div class="col-md-5" style="margin: 4em auto;">
-<div class="card" style="padding: 1em;">
 
+<div class="ui cards" >
+
+
+
+<div class="card" style="padding: 1em;" >
 <!--inner-->
-  <h6 class="text-center text-muted text-capitalize">Websites in build... </h6>
+  <a class="ui green ribbon label" data-title="Personal Projects:" data-content="Start and manage your own personal projects. Create short project goals and tick them off as you complete your website. Once the website is complete it will be added to your profile along with the url. Fill in the form on the left and off you go!" data-variation="wide">Websites in build...</a>
 <ol>
   {% for p in projects %}
-  <li title="view all activities in project" ><p><a href="{% url 'activity' id=p.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{p.title}} <span class="badge badge-primary">pending</span></a></p></li>
+  <li ><p><a href="{% url 'activity' id=p.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{p.title}} <a class="ui green tag label mini">pending</a></p></li>
   {% empty %}
    <p class="text-muted"> No projects pending.</p>
   {%endfor%}
 </ol>
-<form action="" method="post" class="form">
+<form action="" method="post" class="ui form">
   
   <h3 class="text-center">Start new project</h3>
 
     {% csrf_token %}
-    {% bootstrap_form form%}
-    <button type="submit" class="btn btn-info">Submit</button>
+    <div class="field">
+    <div class="ui input focus">
+      <input type="text" name="title" maxlength="100" placeholder="Title" title="" required="" id="id_title">
+    </div>
+  </div>
+
+    <button class="ui fluid olive button submit">Submit</button>
+
+</form>
+</div>
+
+
+<div class="card" style="padding: 1em;" >
+
+<!--inner-->
+   <a class="ui blue ribbon label" data-title="Group projects:" data-content="Group projects are to help manage your team when working on a large or important project. Once you create a group project you can add your team members as collaborators and assign each team memeber to a specific task. Also once the task is complete it will be visible on the group project. Start by filling in the form on the right!" data-variation="wide">Current Group Project </a>
+<ol>
+  {% for pro in project %}
+  <li><p><a href="{% url 'group-project' id=pro.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{pro.project_title}} <span class="ui teal tag label mini">Open project</span></a></p></li>
+  {% empty %}
+   <p class="text-muted"> No group projects.</p>
+  {%endfor%}
+</ol>
+<form action="" method="post" class="ui form">
+  
+  <h3 class="text-center">Start new group project</h3>
+
+    {% csrf_token %}
+    <div class="field">
+      <div class="ui input focus">
+        <input type="text" name="project_title" maxlength="90" class="form-control" placeholder="Project title" title="" required="" id="id_project_title">
+    </div>
+  </div>
+    <button type="submit" class="ui fluid teal button">Submit</button>
 </form>
 
 </div>
+
+<div class="card" style="padding: 1em;">
+
+<!--inner-->
+   <a class="ui white ribbon label">Profile </a>
+
+  
+<h3>Your Profile:</h3>
+<p>Your email, bio and profile image is required to complete your profile. Click on the 'Profile' button to view/update your details. </p>
+  <a href="{% url 'profile' %}" class="ui button"> Profile</a>
 </div>
 
-<div class="col-md-5" style="margin: 4em auto;">
-<h3>Personal projects:</h3>
-<p class="text-muted">Start and manage your own personal projects. Create short project goals and tick them off as you complete your website. Once the website is complete it will be added to your profile along with the url. Fill in the form on the left and off you go!</p>
-</div>
 
 </div>
+</div>
+
+<div class="ui statistics" >
+
+  <div class="statistic green" style="margin:auto;">
+    <div class="value ">
+      {{sites}}
+    </div>
+    <div class="label">
+      websites
+    </div>
+  </div>
+  <div class="statistic blue" style="margin:auto;">
+    <div class="value ">
+      {{groups}}
+    </div>
+    <div class="label">
+      Group Projects
+    </div>
+  </div>
+  <div class="statistic grey" style="margin:auto;">
+    <div class="value ">
+      {{users}}
+    </div>
+    <div class="label">
+      Signups
+    </div>
+  </div>
+  
+  
+</div>
 
 
-<div style="background-image: url('/static/images/dev.jpg');background-attachment: fixed;">
-<div class="row container" style="margin: 2em auto;">
+<h3>Developer</h3>
+<p>This site was developed by David.</p>
+
+</div>
+</div>
+
+<!--<div style="background-image: url('/static/images/dev.jpg');background-attachment: fixed;">
+<div class="row ui container" style="margin: 2em auto;">
 
 <div class="col-md-5" style="margin: 4em auto;">
 <h3>Group projects:</h3>
 <p class="text-muted">Group projects are to help manage your team when working on a large or important project. Once you create a group project you can add your team members as collaborators and assign each team memeber to a specific task. Also once the task is complete it will be visible on the group project. Start by filling in the form on the right!</p>
 </div>
-<div class="col-md-5" style="margin: 4em auto;">
-<div class="card" style="padding: 1em;">
 
-<!--inner-->
-  <h6 class="text-center text-muted text-capitalize">Current Group Project </h6>
-<ol>
-  {% for pro in project %}
-  <li title="view all activities in project" ><p><a href="{% url 'group-project' id=pro.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{pro.project_title}}<span class="badge badge-success">Open project</span></a></p></li>
-  {% empty %}
-   <p class="text-muted"> No group projects.</p>
-  {%endfor%}
-</ol>
-<form action="" method="post" class="form">
-  
-  <h3 class="text-center">Start new group project</h3>
 
-    {% csrf_token %}
-    {% bootstrap_form forms%}
-    <button type="submit" class="btn btn-warning">Submit</button>
-</form>
-
-</div>
-</div>
 
 
 
 </div>
-</div>
-<div class="row container" style="margin: 2em auto;">
-
-
-<div class="col-md-5" style="margin: 4em auto;">
-<div class="card" style="padding: 1em;">
-<img src="/static/images/profile_image.png" style="width: 100%;">
-<p>
-<a href="{% url 'profile' %}" class="btn btn-primary">Profile</a>
-</p>
-</div>
+</div>-->
 
 
 
-</div>
-
-<div class="col-md-5" style="margin: 4em auto;">
-<h3>Your Profile:</h3>
-<p class="text-muted">Once signed up, a user profile will be created automatically. Your email, bio and profile image is required to complete your profile. Click on the 'Profile' button to view/update your details. </p>
-</div>
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://unpkg.com/typewriter-effect@2.3.1/dist/core.js"></script>
+<script type="text/javascript">
+var title = document.getElementById('title');
+
+var typewriter = new Typewriter(title, {
+    loop: false
+});
+
+typewriter.typeString(' Developer Site Manager')
+    /*.typeString('Strings can be removed')
+    .pauseFor(2500)
+    .deleteChars(7)
+    .typeString('<strong>altered!</strong>')
+    .pauseFor(2500)*/
+    .start();
+
+
+  $('.value').each(function () {
+    $(this).prop('Counter',0).animate({
+        Counter: $(this).text()
+    }, {
+        duration: 3000,
+        easing: 'swing',
+        step: function (now) {
+            $(this).text(Math.ceil(now));
+        }
+    });
+});
+</script>
 </div>
 
 

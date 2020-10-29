@@ -1,42 +1,54 @@
-{% extends 'base.html' %}
+ {% extends 'base.html' %}
  {%block body%}
 {% load bootstrap4 %}
-
+<div class="ui container">
 {%for message in messages%}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}}</strong> {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
 <br>
 <div class="col-md-4" style="margin:2em auto;margin-bottom: 1em;"> 
 <div class="card" style="padding: 1em;">
 <h3 class="text-center text-muted">Update task</h3>
-<form action="" method="post" class="form">
+<form action="" method="post" class="ui form">
     {% csrf_token %}
    
 
-  <div class="form-group is-invalid">
+  <div class="field">
+
   <label for="id_task">Task</label>
 
-  <textarea name="task" cols="40" rows="10" maxlength="10000" class="form-control is-valid" placeholder="Task" title="" required="" id="id_task">{{task.task}}</textarea>
+  
+
+   <textarea rows="2" maxlength="10000" name="task" class="form-control is-valid" placeholder="Task" title="" required="" id="id_task">{{task.task}}</textarea>
 
   </div>
 
-  <div class="form-group is-invalid">
-  <label for="id_assign_collaborator_to_task">Assign collaborator to task</label>
-  <select name="{{form.assign_collaborator_to_task.name}}" class="form-control is-invalid" title="" required="" id="id_{{form.assign_collaborator_to_task}}
-  </select>
-    <div class="invalid-feedback">This field is required.</div>
+  <div class="field">
+<select class="ui dropdown" name="assign_collaborator_to_task"  title="" required="" id="id_assign_collaborator_to_task">
+
+  {% for name in form.assign_collaborator_to_task  %}
+
+    <option value="{{name.id}}">{{name}}</option>
+
+  {% endfor %}
+
+</select>
+
+
 
   </div>
-    <button type="submit" class="btn btn-warning">Submit</button>
+    <button type="submit" class="ui purple basic button large">Submit</button>
 
 
 </form>
 
+</div>
 </div>
 </div>
     {%endblock%}

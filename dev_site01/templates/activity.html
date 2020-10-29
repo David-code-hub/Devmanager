@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
  {%block body%}
 {% load bootstrap4 %}
+{% load crispy_forms_tags %}
+
 {%for message in messages%}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}} </strong>  {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
 </br>
-<div class="row container" style="margin:2em auto;">
+
+<div class="row ui container" style="margin:2em auto;">
 {%for p in project %}
 {% if p.project_url%}
 <div class="col-md-7" style="margin-bottom: 1em;margin:0 auto;">
@@ -46,6 +50,7 @@ Time to complete website : {{p.duration}}</p>
 	</div>
 </div>
 {%else%}
+
 <div class="col-md-7" style="margin-bottom: 1em;">
 	<div class="card" style="padding: 1em;">
 
@@ -56,13 +61,10 @@ Time to complete website : {{p.duration}}</p>
 
 
 		{% if p.end_date%}
-
-		<p class="text-muted">Please add url.</p>
-
-		{%else%}
-
+		
+		{% else %}
 		<h5>
-		<a href="{%url 'complete_project' id=p.id%}" class="btn btn-success btn-sm">Project Complete</a>
+		<a href="{%url 'complete_project' id=p.id%}" class="ui positive basic button">Project Complete</a>
 		</h5>
 
 
@@ -75,7 +77,15 @@ Time to complete website : {{p.duration}}</p>
 		{%for a in activity %}
 
 			{% if a.done == False%}
-		<li>{{a.activity}} <a href="{% url 'done' id=a.id%}" class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i> </a> <a href="{% url 'delete_list' id=a.id%}" class="btn btn-outline-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a></li> <br>
+		<li>{{a.activity}}  
+			<a href="{% url 'done' id=a.id%}" class="ui green basic left attached button small"><i class="fa fa-check" aria-hidden="true"></i></a>
+			<a href="{% url 'delete_list' id=a.id%}" class="right red basic attached ui button small"><i class="fa fa-times" aria-hidden="true"></i></a>
+		</li>
+
+
+
+
+			<br>
 
 			{%else%}
 
@@ -97,23 +107,30 @@ Time to complete website : {{p.duration}}</p>
 {%for p in project %}
 
 {% if  p.complete == True %}
-<form action="" method="post" class="form">
+<form action="" method="post" class="ui form">
 	<h3 class="text-center">Additional information</h3>
 	<p class="text-muted">Add url for your projects(copy and paste url link from browser).</p>
 
     {% csrf_token %}
+
     {% bootstrap_form formurl%}
-    <button type="submit" class="btn btn-info">Submit</button>
+<br>
+    <button type="submit" class="ui button">Submit</button>
 </form>
 
 {%else%}
 
-<form action="" method="post" class="form" >
+<form action="" method="post" class="ui form" >
 	<h3 class="text-center">Add task</h3>
 
     {% csrf_token %}
-    {% bootstrap_form form%}
-    <button type="submit" class="btn btn-info">Submit</button>
+    
+    <div class="field">
+	    <label>Activity :</label>
+	    <textarea rows="2" name="activity" cols="40" rows="10" maxlength="10000" class="form-control" placeholder="Activity" title="" required="" id="id_activity"></textarea>
+	</div>
+
+    <button type="submit" class="ui button">Submit</button>
 </form>
 {%endif%}
 

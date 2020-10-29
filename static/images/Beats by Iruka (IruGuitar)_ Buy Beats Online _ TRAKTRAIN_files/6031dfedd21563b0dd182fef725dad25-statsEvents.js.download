@@ -1,0 +1,1 @@
+function trackPlay(a,b){$.ajax({url:"/api/stats/play/"+parseInt(a)+"/"+parseInt(b),method:"GET",success:function success(){},error:function error(){}})}

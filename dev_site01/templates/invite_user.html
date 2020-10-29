@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {%block body%}
 {% load bootstrap4 %}
+{% load crispy_forms_tags%}
+<div class="ui container">
 {%for message in messages%}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}} </strong>  {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
 </br>
@@ -17,22 +20,17 @@
     <p class="text-muted text-center">Add collaborator by typing in username.</p>
     <br>
 
-    <form action="" method="post" class="form">
+    <form action="" method="post" class="ui form">
   
 
     {% csrf_token %}
     {% bootstrap_form form%}
-    <hr>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <br>
+    <button type="submit" class="ui olive basic button large">Submit</button>
 </form>
     
-
-
-
-
-
-
   </div>
+</div>
 </div>
 
 {%endblock%}

@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
  {%block body%}
 {% load bootstrap4 %}
+{% load crispy_forms_tags%}
 <style type="text/css">
 	
 	#task_filter{
 		display: none;
 	}
 </style>
+
 {%for message in messages%}
 
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}} </strong>  {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
 </br>
@@ -24,7 +27,7 @@
 
 
 
-<div class="row container" style="margin: 2em auto;">
+<div class="row ui container" style="margin: 2em auto;">
 
 
 <div class="col-md-7">
@@ -33,16 +36,16 @@
 
 <h5>
 {% if project.lead == request.user%}
-<a href="{% url 'add_collab' id=project.id%}" class="btn btn-primary btn-sm m-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Collaborators</a> 
+<a href="{% url 'add_collab' id=project.id%}" class="ui purple basic button"><i class="fa fa-user-plus" aria-hidden="true"></i> Collaborators</a> 
 
-<a href="{% url 'close_project' id=project.id%}"  class="btn btn-danger btn-sm">Close Project</a>
+<a href="{% url 'close_project' id=project.id%}"  class="ui red basic button">Close Project</a>
 {%endif%}
 </h5>
 
 <hr>
 
 <h5>
-<button onclick="taskFunction()" class="btn btn-light btn-sm" id="text">View your tasks</button> 
+<button onclick="taskFunction()" class="ui button" id="text">View your tasks</button> 
 </h5>
 
 <ol id="demo">
@@ -54,7 +57,7 @@
 
 
 <li><del>{{t.task}}</del>
-<a href="#" title="{{t.assign_collaborator_to_task}}" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" >
+<a href="#" title="{{t.assign_collaborator_to_task}}" class="ui {{t.assign_collaborator_to_task.label_colour}} tag label mini" >
 {{t.assign_collaborator_to_task|make_list|first}}
 </a>
 </li><br>
@@ -65,11 +68,12 @@
 
 
 <li>{{t.task}}
-<a href="#" title="{{t.assign_collaborator_to_task}}" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" ><i class="fa fa-user " aria-hidden="true"></i> 
+<a href="#" title="{{t.assign_collaborator_to_task}}"  class="ui {{t.assign_collaborator_to_task.label_colour}} tag label mini"  ><i class="fa fa-user " aria-hidden="true"></i> 
 {{t.assign_collaborator_to_task|make_list|first}}
 </a>
+
 {% if project.lead == request.user%}
-<a href="{% url 'update_task' id=t.id %}" class="btn btn-info btn-sm"><i class="fa fa-edit" aria-hidden="true"></i></a>
+<a href="{% url 'update_task' id=t.id %}" class="ui blue basic button tiny" data-content="update" ><i class="fa fa-edit" aria-hidden="true"></i></a>
 {%endif%}
 </li><br>
 
@@ -91,18 +95,18 @@
 
 
 <li ><del>{{t.task}}</del>
-<a href="#" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" >
+<span href="#"class="ui {{t.assign_collaborator_to_task.label_colour}} tag label mini" >
 {{t.assign_collaborator_to_task|make_list|first}}
-</a>
+</span>
 </li><br>
 
 {% else %}
 
 <li >{{t.task}}
-<a href="#" class="badge badge-{{t.assign_collaborator_to_task.label_colour}}" >
+<span href="#" class="ui {{t.assign_collaborator_to_task.label_colour}} tag label mini" >
 {{t.assign_collaborator_to_task|make_list|first}}
-</a>
-<a href="{% url 'complete' id=t.id%}"  class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i></a>
+</span>
+<a href="{% url 'complete' id=t.id%}"  class="ui positive basic button tiny" data-content="Mark complete"><i class="fa fa-check" aria-hidden="true"></i></a>
 
 </p>
 </li>
@@ -136,12 +140,22 @@
 <div class="card" style="padding: 1em;">
 {% if project.lead == request.user%}
 
-<form action="" method="post">
+<form action="" method="post" class="ui form">
 	    {% csrf_token %}
-{% bootstrap_form form%}
- {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    {% endbuttons %}
+	<div class="field">
+	  <label for="id_task">Task</label>
+	   <textarea rows="2" maxlength="10000" name="task" class="form-control is-valid" placeholder="Task" title="" required="" id="id_task">{{task.task}}</textarea>
+	 </div>
+
+  	<div class="field">
+		<select class="ui dropdown" name="assign_collaborator_to_task"  title="" required="" id="id_assign_collaborator_to_task">
+		  {% for name in form.assign_collaborator_to_task  %}
+		    <option value="{{name.id}}">{{name}}</option>
+		  {% endfor %}
+		</select>
+	</div>
+
+        <button type="submit" class="ui olive basic button large">Submit</button>
 </form>
 {%else%}
 
@@ -200,16 +214,16 @@ function taskFunction(){
 
 {% else %}
 
-<div class="container row" style="margin: 2em auto;">
+<div class="ui container row" style="margin: 2em auto;">
 <div class="col-md-5" style="margin: 0 auto;">
 <div class="card" style="padding: 1em;">
 
 <h2 class="text-muted text-center"> This project has been closed and is not active.</h2>
 
 {% if project.lead == request.user%}
-<hr>
+<br>
 <h5>
-<a href="{% url 'open_project' id=project.id%}"  class="btn btn-success btn-sm">Open project</a>
+<a href="{% url 'open_project' id=project.id%}"  class="ui positive basic button large">Open project</a>
 </h5>
 {%endif%}
 

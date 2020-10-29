@@ -1,0 +1,1 @@
+$(document).ready(function(){var a=$("._js-custom-scrollbar").overlayScrollbars({overflowBehavior:{x:"hidden",y:"scroll"},scrollbars:{autoHide:"leave"}}),b=$("._js-custom-scrollbar--textarea").overlayScrollbars({resize:"horizontal",overflowBehavior:{x:"hidden",y:"scroll"},scrollbars:{autoHide:"leave"},textarea:{inheritedAttrs:"style"}})});

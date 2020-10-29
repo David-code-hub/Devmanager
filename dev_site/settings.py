@@ -39,10 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dev_site01',
     'bootstrap4',
+    'crispy_forms',
+    'crispy_forms_semantic_ui',
 
 ]
 
-
+CRISPY_TEMPLATE_PACK="semantic-ui"
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3',
+                                 'bootstrap4', 'semantic-ui',)
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
