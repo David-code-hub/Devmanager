@@ -1,7 +1,16 @@
  {% extends 'base.html' %}
  {%block body%}
 {% load bootstrap4 %}
+<br>
 <div class="ui container">
+  <h2 class="ui header">
+  <i class="settings icon"></i>
+  <div class="content">
+   Update Task
+    <div class="sub header">Update a specific users task or assign a different user to task.</div>
+    <br>
+  </div>
+</h2>
 {%for message in messages%}
 <div class="ui {{message.tags}} message">
   <i class="close icon"></i>
@@ -14,7 +23,8 @@
 <br>
 <div class="col-md-4" style="margin:2em auto;margin-bottom: 1em;"> 
 <div class="card" style="padding: 1em;">
-<h3 class="text-center text-muted">Update task</h3>
+
+<h3 class="ui teal header">Edit/change form below</h3>
 <form action="" method="post" class="ui form">
     {% csrf_token %}
    

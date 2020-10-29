@@ -407,7 +407,7 @@ def profile(request):
 	profile_group_project = p.group_project.all().order_by('-id')
 	group_project = p.group_project.all().count()
 
-	form = UserProfileForm(request.POST,instance=p)
+	form = UserProfileForm(request.POST or None,instance=p)
 	if request.method == 'POST':
 		if form.is_valid():
 			save = form.save(commit=False)

@@ -1,42 +1,23 @@
 {% extends 'base.html' %}
- {%block body%}
+{%block body%}
 {% load bootstrap4 %}
-<style type="text/css">
-  .card{
-    box-shadow: inset 1px 2px 8px black;
-    border:5px solid rgba(0,0,0,0.28);
-  }
-  li{
-    border-bottom: 1px solid rgba(0,0,0,0.28);
-    margin-bottom: 0.3em;
-    margin-top: 0.3em;
+{% load crispy_forms_tags %}
 
-  }
-  li:hover{
-      background: #ededed;
-  }
-
-  .col-md-3{
-    border-left: 1px dotted rgba(0,0,0,0.28);
-  }
-  #group{
-    display: none;
-  }
-</style>
 {%for message in messages%}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}}</strong> {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
 
 </br>
  {% if p.update == False %}
-<div class="row container" style="margin:0 auto;margin-top: 3em;">
+<div class="row ui container" style="margin:0 auto;margin-top: 3em;">
 <div class="col-md-6" style="margin: 1em auto;">
-<div class="card" style="padding: 1em;">
+<div class="ui card" style="padding: 1em;">
  
 <div class="row">
   <div class="col-md-3">
@@ -49,9 +30,9 @@
 <p>Websites : <span class="badge badge-info">{{count}}</span> |
 Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 
-<a href="{%url 'update' %}" class="btn btn-success btn-sm m-1"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
+<a href="{%url 'update' %}" class="ui blue  basic button"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
 
-<button class="btn btn-outline-dark btn-sm m-1" onclick="groupFunction()"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
+<button class="ui teal basic button" onclick="groupFunction()"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
 </div>
 </div>
 <hr>
@@ -62,27 +43,36 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 
 
 
-<div class="col-md-6">
-<div class="card" style="height: 450px;overflow: auto;padding: 1em;">
+<div class="ui container">
 
 <div id="web">
   <h3  class="text-center text-success" style="font-weight:800;"><i class="fa fa-code"></i> Completed websites:</h3>
 <ol>
+  <div class="ui cards">
 {% for p in project%}
+
 {% if p.project_url%}
 
-<li style="border-bottom: 0px;">
-<div class="row">
-  <div class="col-md-9">
-<a href="{% url 'activity' id=p.id %}"><h6 class="text-capitalize text-monospace" style="font-weight: 600;">{{p.title}}</h6></a>
-</div>
-
-<div class="col-md-3">
-<p class="text-muted">
-<a href="{% url 'delete_single_project' id=p.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt" aria-hidden="true"></i></a></p>
-</div>
-</div>
-</li>
+  <div class="card">
+    <div class="content">
+      <div class="header">
+        {{p.website_owner}}
+      </div>
+      <div class="meta">
+        {{p.title}}
+      </div>
+      <div class="description">
+       Duration : {{p.duration}}
+      </div>
+    </div>
+    <div class="extra content">
+      <div class="ui two buttons">
+        <a href="{% url 'activity' id=p.id %}" class="ui basic green button">View</a>
+        <a href="{% url 'delete_single_project' id=p.id %}" class="ui basic red button">Remove</a>
+      </div>
+    </div>
+  </div>
+  
 
 
 <!--Website url : <a href="{{p.project_url}}" target="_blank">{{p.project_url|slice:":20" }}... </a>-->
@@ -91,31 +81,41 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 {% empty %}
 <p class="text-muted text-center">You have not completed any websites/projects</p>
 {%endfor%}
+</div>
 </ol>
 </div>
 
+
+
 <div id="group">
   <h3 class="text-center text-success" style="font-weight:800;"><i class="fa fa-laptop-code"></i> Group projects</h3>
-<ol>
+
+  <div class="ui cards">
 {% for p in profile_group_project %}
 <!--startif-->
 {% if p.lead == request.user%}
 
-<li>
-<div class="row">
-  <div class="col-md-9">
-<a href="{% url 'group-project' id=p.id%}" class="btn btn-info btn-sm" title="view your group project"><i class="fa fa-link" aria-hidden="true"></i>
-{{p.project_title}} </a>
-<a href="{% url 'close_project_owner' id=p.id%}" class="btn btn-primary btn-sm m-1"><i class="fa fa-trash-alt" aria-hidden="true"></i></a>
-</div>
 
-<div class="col-md-3">
-<span class="badge badge-warning">Owner</span>
-</div>
-</div>
+<div class="card">
+    <div class="content">
+      <div class="header">
+        {{p.project_title}}
+      </div>
+      <div class="meta">
+        Lead : {{p.lead}}
+      </div>
+      <div class="description">
+       Status : {{p.status}}
+      </div>
+    </div>
+    <div class="extra content">
+      <div class="ui two buttons">
+        <a href="{% url 'group-project' id=p.id%}" class="ui green basic button" title="view your group project">View</a>
+        <a href="{% url 'close_project_owner' id=p.id%}" class="ui red basic button">Remove</a>
+      </div>
+    </div>
+  </div>
 
-<p class="text-muted"> </p>
-</li>
 
 
 {% else %}
@@ -123,13 +123,11 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 <li>
 <div class="row">
 <div class="col-md-9">
-<a href="{% url 'group-project' id=p.id%}" class="btn btn-info btn-sm" title="join"><i class="fa fa-link" aria-hidden="true"></i>{{p.project_title}}</a>
-<a href="{% url 'leave_project' id=p.id%}" class="btn btn-primary btn-sm m-1" title="Leave project"><i class="fa fa-walking" aria-hidden="true"></i></a>
+<a href="{% url 'group-project' id=p.id%}" class="ui green basic button" data-content="join"><i class="fa fa-link" aria-hidden="true"></i>{{p.project_title}}</a>
+
+<a href="{% url 'leave_project' id=p.id%}" class="ui red basic button" data-content="Leave project"><i class="fa fa-walking" aria-hidden="true"></i></a>
 </div>
 
-<div class="col-md-3">
- <span class="badge badge-secondary">Collaborator</span>
-</div>
 </div>
  <p class="text-muted"> </p>
  </li>
@@ -143,57 +141,26 @@ Group Projects : <span class="badge badge-info">{{group_project}}</span></p>
 <p class="text-muted text-center">You have not been added to or created any group projects.</p>
 
 {% endfor %}
-</ol>
 </div>
 
-
-
 </div>
+
 </div>
 </div>
 
 {%else%}
 
-<div class="col-md-6" style="margin: 0 auto;margin-top: 3em;">
+<div class="ui container" style="margin: 0 auto;margin-top: 3em;">
 <div class="card" style="padding: 1em;">
-<form action="" method="post" class="form" enctype="multipart/form-data">
+<form action="" method="post" class="ui form" enctype="multipart/form-data">
   <h3 class="text-center">Update Profile</h3>
 
     {% csrf_token %}
 
 
-<div class="form-group is-valid">
-  <label for="id_image">Image</label>
-  <br>
-  {% if p.image%}
-  Currently: <a href="{{p.image.url}}">{{p.image.url}}</a>
-  {% else %}
-  Currently:
-  {% endif %}
-<input type="checkbox" name="image-clear" id="image-clear_id">
-<label for="image-clear_id">Clear</label><br>
-Change:
-<input type="file" name="image" accept="image/*" class="form-control-file is-valid" title="" id="id_image">
-
-</div>
-
-
-<div class="form-group is-valid">
-  <label for="id_email">Email</label>
-  <input type="email" name="email" maxlength="254" class="form-control is-valid" placeholder="Email" title="" id="id_email" value="{{p.email}}">
-</div>
-
-<div class="form-group is-invalid">
-  <label for="id_bio">Bio</label>
-  <textarea name="bio" cols="40" rows="10" maxlength="300" class="form-control is-valid" placeholder="Bio" title="" required="" id="id_bio" value="" >{{p.bio}}</textarea>
-
-</div>
-
-
-
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    {% endbuttons %}
+{% bootstrap_form form%}
+    <br>
+        <button type="submit" class="ui positive basic button">Submit</button>
 </form>
 </div>
 </div>

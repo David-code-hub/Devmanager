@@ -34,7 +34,7 @@
   <a class="ui green ribbon label" data-title="Personal Projects:" data-content="Start and manage your own personal projects. Create short project goals and tick them off as you complete your website. Once the website is complete it will be added to your profile along with the url. Fill in the form on the left and off you go!" data-variation="wide">Websites in build...</a>
 <ol>
   {% for p in projects %}
-  <li ><p><a href="{% url 'activity' id=p.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{p.title}} <a class="ui green tag label mini">pending</a></p></li>
+  <li ><p><a href="{% url 'activity' id=p.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{p.title}} <a class="ui label mini">pending</a></p></li>
   {% empty %}
    <p class="text-muted"> No projects pending.</p>
   {%endfor%}
@@ -50,7 +50,7 @@
     </div>
   </div>
 
-    <button class="ui fluid olive button submit">Submit</button>
+    <button class="ui fluid olive button submit" style="border-top-left-radius: 0em!important;border-top-right-radius: 0em!important;">Next</button>
 
 </form>
 </div>
@@ -62,7 +62,7 @@
    <a class="ui blue ribbon label" data-title="Group projects:" data-content="Group projects are to help manage your team when working on a large or important project. Once you create a group project you can add your team members as collaborators and assign each team memeber to a specific task. Also once the task is complete it will be visible on the group project. Start by filling in the form on the right!" data-variation="wide">Current Group Project </a>
 <ol>
   {% for pro in project %}
-  <li><p><a href="{% url 'group-project' id=pro.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{pro.project_title}} <span class="ui teal tag label mini">Open project</span></a></p></li>
+  <li><p><a href="{% url 'group-project' id=pro.id %}" style="font-weight: 600;" class="text-capitalize text-monospace text-muted"> {{pro.project_title}} <span class="ui label mini ">Open project</span></a></p></li>
   {% empty %}
    <p class="text-muted"> No group projects.</p>
   {%endfor%}
@@ -73,11 +73,12 @@
 
     {% csrf_token %}
     <div class="field">
-      <div class="ui input focus">
-        <input type="text" name="project_title" maxlength="90" class="form-control" placeholder="Project title" title="" required="" id="id_project_title">
+        <div class="ui input focus">
+          <input type="text" name="project_title" maxlength="90" class="form-control" placeholder="Project title" title="" required="" id="id_project_title">
+        </div>
     </div>
-  </div>
-    <button type="submit" class="ui fluid teal button">Submit</button>
+    <button type="submit" class="ui fluid teal button" style="border-top-left-radius: 0em!important;border-top-right-radius: 0em!important;">Next</button>
+
 </form>
 
 </div>

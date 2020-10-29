@@ -1,35 +1,46 @@
 {% extends 'base.html' %}
  {%block body%}
 {% load bootstrap4 %}
+{% load crispy_forms_tags %}
+
+<div class="row ui container" style="margin:2em auto;">
+<h2 class="ui header">
+  <i class="users icon"></i>
+  <div class="content">
+   Add collaborator
+    <div class="sub header">Add collaborators to your group projects.</div>
+    <br>
+    <a href="{% url 'group-project' id=project.id %}" class="ui positive basic  button">Back to project</a>
+  </div>
+</h2>
+
 {%for message in messages%}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show col-md-9" role="alert" style="margin: 0 auto;">
-  <strong>{{message.tags}} </strong>  {{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="ui {{message.tags}} message">
+  <i class="close icon"></i>
+  <div class="header">
+    <strong>{{message.tags}} !</strong>
+  </div>
+  <p>{{message}}</p>
 </div>
 {%endfor%}
 </br>
 
-<div class="row container" style="margin:2em auto;">
 
 <div class="col-md-5">
 <div class="card" style="margin: auto;padding: 1em;">
 
 
-<form action="" method="post" class="form">
-	<h3 class="text-center">Add collaborator</h3>
-  <p class="text-muted text-center">Add collaborator by typing in username.</p>
-	<a href="{% url 'group-project' id=project.id %}" class="btn btn-light btn-sm">Back to project</a>
-	<hr>
+<form action="" method="post" class="ui form">	<h3 class="text-center"></h3>
+  <p class="ui red header">Add collaborator by typing in username.</p>
+	
+
     {% csrf_token %}
 
 
 {% bootstrap_form form %}
 
- {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    {% endbuttons %}
+<br>
+        <button type="submit" class="ui purple basic button">Submit</button>
 
 
 </form>
@@ -38,30 +49,29 @@
 </div>
 </div>
 
-
-
-<div class="col-md-5">
-<div class="card" style="padding: 1em;margin: 1em auto;">
-<h3 class="text-center">Project collaborators</h3>
+<div class="" style="padding: 1em;margin: 1em auto;">
+<h3 class="ui teal header">Project collaborators</h3>
 <hr>
-<ol>
+
 
 
 {% for c in collaborator %}
+<div class="ui image label">
+  <img src="/media/{{c.profile.image}}">
+  {{c.collaborator}} 
+  <a href="{% url 'remove_collab' id=c.id%}" data-content="Remove" ><i class="delete icon"></i></a>
+</div>
 
-<li class="text-primary" style="font-weight: 600;"> <img src="/media/{{c.profile.image}}" style="height: 40px;width: 40px;border-radius: 2em;"> {{c.collaborator}} <a href="{% url 'remove_collab' id=c.id%}" class="btn btn-danger btn-sm" title="remove from project"><i class="fa fa-user-times" aria-hidden="true"></i></a>
-</li>
-<br>
+
 
 
 {% endfor %}
 
-</ol>
 
 
 
 
-</div>
+
 </div>
 
 </div>
